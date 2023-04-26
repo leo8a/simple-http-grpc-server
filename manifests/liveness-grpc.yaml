@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: liveness-grpc
+  namespace: probes-study
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: liveness-grpc
+  template:
+    metadata:
+      labels:
+        app: liveness-grpc
+    spec:
+      containers:
+        - name: liveness-grpc
+          image: quay.io/lochoa/simple-http-grpc-server
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
+          livenessProbe:
+            grpc:
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 60
